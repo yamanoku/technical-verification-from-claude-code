@@ -1,0 +1,203 @@
+---
+// Server-side code (this runs during SSR)
+let serverScopeId = '';
+let serverGeneratedAt = '';
+let serverMultipleIds = [];
+let serverError = null;
+
+try {
+  // Attempt to use Simple Scope on the server
+  // This will likely cause hydration mismatches with client-side generation
+  const { scope } = await import('@simple-stack/scope');
+  
+  serverScopeId = scope();
+  serverGeneratedAt = new Date().toISOString();
+  serverMultipleIds = Array.from({ length: 3 }, () => scope());
+} catch (error) {
+  console.error('Server-side Simple Scope error:', error);
+  serverScopeId = 'SERVER_ERROR';
+  serverGeneratedAt = 'SERVER_ERROR';
+  serverMultipleIds = ['SERVER_ERROR'];
+  serverError = error.message;
+}
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Simple Scope + Astro SSR Test</title>
+  </head>
+  <body>
+    <div>
+      <h1>Simple Scope + Astro SSR Test</h1>
+      
+      <div class="test-section">
+        <h2>Server-side Generated Scope</h2>
+        <p>Server Scope ID: <code id="server-scope-id">{serverScopeId}</code></p>
+        <p>Server Generated at: <span id="server-generated-at">{serverGeneratedAt}</span></p>
+        {serverError && <p class="error">Server Error: {serverError}</p>}
+      </div>
+
+      <div class="test-section">
+        <h2>Server Multiple Scopes</h2>
+        {serverMultipleIds.map((id, index) => (
+          <p>Server Scope {index + 1}: <code class="server-multiple-id">{id}</code></p>
+        ))}
+      </div>
+
+      <div class="test-section">
+        <h2>Client-side Generated Scope</h2>
+        <p>Client Scope ID: <code id="client-scope-id">Loading...</code></p>
+        <p>Client Generated at: <span id="client-generated-at">Loading...</span></p>
+        <p id="client-error" class="error" style="display: none;"></p>
+      </div>
+
+      <div class="test-section">
+        <h2>Client Multiple Scopes</h2>
+        <div id="client-multiple-scopes">Loading...</div>
+      </div>
+
+      <div class="test-section">
+        <h2>Client-side Re-generation Test</h2>
+        <button id="regenerate-btn">Regenerate Client ID</button>
+        <p>New Client ID: <code id="new-client-id"></code></p>
+      </div>
+
+      <div class="test-section">
+        <h2>Hydration Mismatch Detection</h2>
+        <p class="warning">
+          Compare the server and client generated IDs above. If they are different, 
+          this indicates a hydration mismatch that would cause errors in a real application.
+        </p>
+        <p>Server-side rendered: Yes (you can see server values above)</p>
+        <p>Client hydrated: <span id="client-status">Checking...</span></p>
+        
+        <div id="mismatch-analysis" class="analysis">
+          <h3>Mismatch Analysis</h3>
+          <p>Server ID: <code id="analysis-server-id">{serverScopeId}</code></p>
+          <p>Client ID: <code id="analysis-client-id">Loading...</code></p>
+          <p>Match: <span id="match-result">Checking...</span></p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Client-side hydration test
+      let clientScopeFunction = null;
+      
+      async function initializeClient() {
+        try {
+          const { scope } = await import('@simple-stack/scope');
+          clientScopeFunction = scope;
+          
+          // Generate client-side IDs
+          const clientScopeId = scope();
+          const clientGeneratedAt = new Date().toISOString();
+          const clientMultipleIds = Array.from({ length: 3 }, () => scope());
+          
+          // Update DOM
+          document.getElementById('client-scope-id').textContent = clientScopeId;
+          document.getElementById('client-generated-at').textContent = clientGeneratedAt;
+          document.getElementById('client-status').textContent = 'Yes';
+          
+          // Update multiple scopes
+          const multipleContainer = document.getElementById('client-multiple-scopes');
+          multipleContainer.innerHTML = clientMultipleIds.map((id, index) => 
+            `<p>Client Scope ${index + 1}: <code>${id}</code></p>`
+          ).join('');
+          
+          // Analysis
+          const serverScopeId = document.getElementById('server-scope-id').textContent;
+          document.getElementById('analysis-client-id').textContent = clientScopeId;
+          const isMatch = serverScopeId === clientScopeId;
+          document.getElementById('match-result').textContent = isMatch ? 'YES (Unusual!)' : 'NO (Expected hydration mismatch)';
+          document.getElementById('match-result').className = isMatch ? 'match' : 'mismatch';
+          
+        } catch (error) {
+          console.error('Client-side Simple Scope error:', error);
+          document.getElementById('client-scope-id').textContent = 'CLIENT_ERROR';
+          document.getElementById('client-generated-at').textContent = 'CLIENT_ERROR';
+          document.getElementById('client-error').textContent = 'Client Error: ' + error.message;
+          document.getElementById('client-error').style.display = 'block';
+          document.getElementById('client-status').textContent = 'Error';
+          document.getElementById('analysis-client-id').textContent = 'CLIENT_ERROR';
+          document.getElementById('match-result').textContent = 'Error occurred';
+        }
+      }
+      
+      // Regenerate function
+      document.getElementById('regenerate-btn').addEventListener('click', () => {
+        if (clientScopeFunction) {
+          const newId = clientScopeFunction();
+          document.getElementById('new-client-id').textContent = newId;
+        }
+      });
+      
+      // Initialize when DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeClient);
+      } else {
+        initializeClient();
+      }
+    </script>
+
+    <style>
+      .test-section {
+        margin: 2rem 0;
+        padding: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+      }
+
+      .warning {
+        color: #d73527;
+        font-weight: bold;
+      }
+
+      .error {
+        color: #d73527;
+        font-weight: bold;
+      }
+
+      .analysis {
+        background: #f8f9fa;
+        padding: 1rem;
+        margin-top: 1rem;
+        border-radius: 4px;
+      }
+
+      .match {
+        color: #28a745;
+        font-weight: bold;
+      }
+
+      .mismatch {
+        color: #dc3545;
+        font-weight: bold;
+      }
+
+      code {
+        background: #f4f4f4;
+        padding: 2px 4px;
+        border-radius: 3px;
+        font-family: monospace;
+      }
+
+      button {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #0056b3;
+      }
+    </style>
+  </body>
+</html>
