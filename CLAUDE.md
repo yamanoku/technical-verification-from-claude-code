@@ -38,3 +38,4 @@ technical-verification-from-calude-code/
 - 各検証は独立したディレクトリで実施
 - 検証結果は必ずドキュメント化（README.md）を作成する
 - セキュリティに関わる検証は特に慎重に実施（例：環境変数を露呈させない）
+- ログとしてのoutput.txtはPR内に作成しない
