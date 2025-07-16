@@ -6,9 +6,8 @@
       "Bash(node:*)",
       "Bash(npm:*)",
       "Bash(pnpm:*)",
-      "WebFetch(domain:github.com)",
-      "mcp__mcp-gemini-google-search__google_search"
+      "WebFetch(domain:github.com)"
     ]
   },
-  "enableAllProjectMcpServers": false
+  "enableAllProjectMcpServers": true
 }

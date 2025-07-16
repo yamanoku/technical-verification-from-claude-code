@@ -71,3 +71,4 @@ jobs:
                 }
               }
             }
+          allowed_tools: "mcp__mcp-gemini-google-search__google_search"
