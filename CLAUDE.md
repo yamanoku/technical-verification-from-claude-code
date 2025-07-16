@@ -21,8 +21,25 @@
 technical-verification-from-calude-code/
 ├── YYYY-MM-DD/          # 日付ごとの検証ディレクトリ
 │   ├── project/         # 検証対象のプロジェクト（ディレクトリ名は任意）
+│   │   .gitignore       # Git管理不要なファイル
 │   └── README.md        # 検証内容の説明
 └── CLAUDE.md           # このファイル
+```
+
+### .gitignore
+各プロジェクトディレクトリには、Git管理が不要なファイルを指定するための`.gitignore`ファイルを含めます。以下はその例です。
+
+```
+node_modules/
+dist/
+.DS_Store
+*.log
+
+# ignore top-level vscode settings
+/.vscode/settings.json
+
+# do not commit .env files or any files that end with `.env`
+*.env
 ```
 
 ## 検証項目例
@@ -39,3 +56,4 @@ technical-verification-from-calude-code/
 - 検証結果は必ずドキュメント化（README.md）を作成する
 - セキュリティに関わる検証は特に慎重に実施（例：環境変数を露呈させない）
 - ログとしてのoutput.txtはPR内に作成しない
+- .gitignoreファイルを適切に設定し、不要なファイルがコミットされないようにする
