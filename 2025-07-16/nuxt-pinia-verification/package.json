@@ -1,0 +1,22 @@
+{
+  "name": "nuxt4-pinia-latest-verification",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxt/ui": "^2.18.7",
+    "@pinia/nuxt": "^0.7.0",
+    "nuxt": "^4.0.0",
+    "pinia": "^2.3.0"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "latest",
+    "@nuxtjs/tailwindcss": "^6.12.1"
+  }
+}
