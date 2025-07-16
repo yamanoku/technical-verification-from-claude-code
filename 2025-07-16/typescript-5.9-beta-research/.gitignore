@@ -1,0 +1,63 @@
+node_modules/
+dist/
+build/
+.DS_Store
+*.log
+*.tsbuildinfo
+
+# TypeScript compilation outputs
+*.js
+*.js.map
+*.d.ts
+*.d.ts.map
+
+# IDE settings
+/.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# Environment files
+*.env
+*.env.local
+*.env.production
+*.env.staging
+
+# Coverage and testing
+coverage/
+*.lcov
+.nyc_output/
+jest_*/
+.jest/
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+
+# OS generated files
+Thumbs.db
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
+
+# Package manager
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

@@ -1,0 +1,135 @@
+{
+  "compilerOptions": {
+    // TypeScript 5.9 Beta - 新しい設定オプション例
+    
+    // 基本設定
+    "target": "ES2023",
+    "module": "ES2022",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "allowJs": true,
+    "checkJs": true,
+    "jsx": "react-jsx",
+    
+    // TypeScript 5.9 Beta で強化されたストリクトモード
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "useUnknownInCatchVariables": true,
+    "exactOptionalPropertyTypes": true,
+    
+    // モジュール解決の改善
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    
+    // パフォーマンス最適化設定
+    "incremental": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
+    "composite": false,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    
+    // 出力設定
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "removeComments": true,
+    "noEmit": false,
+    "importHelpers": true,
+    "downlevelIteration": true,
+    
+    // 型チェック強化
+    "forceConsistentCasingInFileNames": true,
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+    "noPropertyAccessFromIndexSignature": false,
+    "noUncheckedIndexedAccess": false,
+    
+    // 実験的機能（TypeScript 5.9 Beta での新機能）
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "useDefineForClassFields": true,
+    
+    // バンドラー統合の改善
+    "verbatimModuleSyntax": false,
+    "allowArbitraryExtensions": false,
+    "customConditions": [],
+    
+    // デバッグ機能の強化
+    "preserveSymlinks": false,
+    "preserveValueImports": false,
+    "preserveWatchOutput": false,
+    "pretty": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    
+    // 型情報の出力
+    "generateCpuProfile": false,
+    "listEmittedFiles": false,
+    "listFiles": false,
+    "traceResolution": false,
+    "diagnostics": false,
+    "extendedDiagnostics": false,
+    
+    // パスマッピング
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/components/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@types/*": ["./src/types/*"]
+    }
+  },
+  
+  // ファイル包含・除外設定
+  "include": [
+    "src/**/*",
+    "tests/**/*",
+    "*.config.*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    "coverage",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ],
+  
+  // TypeScript 5.9 Beta での新しいプロジェクト参照機能
+  "references": [
+    {
+      "path": "./packages/core"
+    },
+    {
+      "path": "./packages/utils"
+    }
+  ],
+  
+  // ウォッチモードの設定
+  "watchOptions": {
+    "watchFile": "useFsEvents",
+    "watchDirectory": "useFsEvents",
+    "fallbackPolling": "dynamicPriority",
+    "synchronousWatchDirectory": true,
+    "excludeDirectories": ["**/node_modules", "**/dist"]
+  },
+  
+  // 型取得の設定
+  "typeAcquisition": {
+    "enable": true,
+    "include": ["jest", "node"],
+    "exclude": ["jquery"]
+  }
+}
