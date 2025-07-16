@@ -1,0 +1,23 @@
+{
+  "name": "nuxt4-pinia-verification",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxt/ui": "^2.18.7",
+    "@pinia/nuxt": "^0.5.5",
+    "nuxt": "^4.0.0",
+    "pinia": "^2.2.6",
+    "vue": "latest"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "^1.6.0",
+    "typescript": "^5.7.2"
+  }
+}
