@@ -35,7 +35,7 @@ jobs:
         id: claude
         uses: anthropics/claude-code-action@beta
         with:
-           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
 
           # Optional: Specify model (defaults to Claude Sonnet 4, uncomment for Claude Opus 4)
           # model: "claude-opus-4-20250514"
@@ -47,7 +47,7 @@ jobs:
           # assignee_trigger: "claude-bot"
 
           # Optional: Allow Claude to run specific commands
-           allowed_tools: "Bash(npm install)"
+          allowed_tools: "Bash(npm install), mcp__sequential-thinking__sequentialthinking"
 
           # Optional: Add custom instructions for Claude to customize its behavior for your project
           # custom_instructions: |
@@ -59,3 +59,15 @@ jobs:
           # claude_env: |
           #   NODE_ENV: test
 
+          # MCP configuration
+          mcp_config: |
+            {
+              "gemini-google-search": {
+                "command": "npx",
+                "args": ["-y", "mcp-gemini-google-search"],
+                "env": {
+                  "GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}",
+                  "GEMINI_MODEL": "gemini-2.5-flash"
+                }
+              }
+            }
