@@ -1,41 +1,41 @@
-# Nuxt 4 + Latest Pinia Verification
+# Nuxt 4 + 最新Pinia 検証
 
-This project verifies the compatibility of the latest versions of Pinia and @pinia/nuxt with Nuxt 4 for SSR applications.
+このプロジェクトは、SSRアプリケーション向けのNuxt 4と最新バージョンのPinia、@pinia/nuxtの互換性を検証します。
 
-## Package Versions
+## パッケージバージョン
 
-- **Nuxt**: 4.0.0 (latest)
-- **Pinia**: 2.3.0 (latest)
-- **@pinia/nuxt**: 0.7.0 (latest)
-- **@nuxt/ui**: 2.18.7 (for UI components)
+- **Nuxt**: 4.0.0 (最新)
+- **Pinia**: 2.3.0 (最新)
+- **@pinia/nuxt**: 0.7.0 (最新)
+- **@nuxt/ui**: 2.18.7 (UIコンポーネント用)
 
-## Features Implemented
+## 実装された機能
 
-### Authentication System
-- TypeScript-powered Pinia store for user management
-- Support for two user roles: `free` and `paid`
-- SSR-safe state initialization and hydration
-- LocalStorage persistence for client-side state
+### 認証システム
+- ユーザー管理用TypeScript対応Piniaストア
+- 2つのユーザーロールをサポート: `free`と`paid`
+- SSRセーフなステート初期化とハイドレーション
+- クライアントサイドステート用のLocalStorage永続化
 
-### Role-Based UI
-- **Premium Banner**: Shown only to paid users with premium styling
-- **Feature Access**: Different UI elements based on user role
-- **Upgrade CTA**: Upgrade prompt for free users
+### ロールベースUI
+- **プレミアムバナー**: プレミアムスタイリングで有料ユーザーのみに表示
+- **機能アクセス**: ユーザーロールに基づく異なるUI要素
+- **アップグレードCTA**: 無料ユーザー向けのアップグレードプロンプト
 
-### SSR Compatibility
-- Proper hydration handling with `process.client` checks
-- State persistence across page reloads
-- Server-side rendering support with client-side initialization
+### SSR互換性
+- `process.client`チェックによる適切なハイドレーション処理
+- ページリロード間でのステート永続化
+- クライアントサイド初期化を伴うサーバーサイドレンダリングサポート
 
-## Demo Accounts
+## デモアカウント
 
-You can test with any username and choose:
-- **Free User**: Basic features, upgrade prompts
-- **Premium User**: Full feature access, premium banner
+任意のユーザー名でテストでき、以下を選択可能：
+- **無料ユーザー**: 基本機能、アップグレードプロンプト
+- **プレミアムユーザー**: 全機能アクセス、プレミアムバナー
 
-## Technical Architecture
+## 技術アーキテクチャ
 
-### Store Structure (`stores/auth.ts`)
+### ストア構造 (`stores/auth.ts`)
 ```typescript
 interface User {
   id: string
@@ -50,37 +50,37 @@ interface AuthState {
 }
 ```
 
-### Key Features
-- **SSR-Safe Initialization**: Uses `onMounted` for client-side hydration
-- **Type Safety**: Full TypeScript integration throughout
-- **Reactive UI**: Conditional rendering based on user role
-- **State Persistence**: LocalStorage integration for session management
+### 主要機能
+- **SSRセーフ初期化**: クライアントサイドハイドレーション用の`onMounted`使用
+- **型安全性**: 全体でのフルTypeScript統合
+- **リアクティブUI**: ユーザーロールに基づく条件レンダリング
+- **ステート永続化**: セッション管理用のLocalStorage統合
 
-## Verification Results
+## 検証結果
 
-✅ **Nuxt 4 Compatibility**: All features work correctly with Nuxt 4.0.0
-✅ **Latest Pinia**: Pinia 2.3.0 integrates seamlessly
-✅ **@pinia/nuxt Module**: 0.7.0 works perfectly for SSR
-✅ **SSR Hydration**: No hydration mismatches or errors
-✅ **TypeScript Support**: Full type safety maintained
-✅ **Production Ready**: Suitable for production SSR applications
+✅ **Nuxt 4互換性**: すべての機能がNuxt 4.0.0で正しく動作
+✅ **最新Pinia**: Pinia 2.3.0がシームレスに統合
+✅ **@pinia/nuxtモジュール**: 0.7.0がSSRで完璧に動作
+✅ **SSRハイドレーション**: ハイドレーションミスマッチやエラーなし
+✅ **TypeScriptサポート**: 完全な型安全性を維持
+✅ **プロダクション対応**: プロダクションSSRアプリケーションに適用可能
 
-## Installation & Development
+## インストールと開発
 
 ```bash
-# Install dependencies
+# 依存関係をインストール
 npm install
 
-# Start development server
+# 開発サーバーを起動
 npm run dev
 
-# Build for production
+# プロダクション用にビルド
 npm run build
 
-# Preview production build
+# プロダクションビルドをプレビュー
 npm run preview
 ```
 
-## Verification Conclusion
+## 検証結論
 
-The latest versions of Pinia (2.3.0) and @pinia/nuxt (0.7.0) are fully compatible with Nuxt 4.0.0 for SSR applications. The integration works seamlessly with proper state management, SSR hydration, and TypeScript support.
+Pinia (2.3.0)と@pinia/nuxt (0.7.0)の最新バージョンは、SSRアプリケーション用のNuxt 4.0.0と完全に互換性があります。適切なステート管理、SSRハイドレーション、TypeScriptサポートによりシームレスに統合されます。
