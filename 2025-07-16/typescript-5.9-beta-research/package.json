@@ -1,0 +1,48 @@
+{
+  "name": "typescript-5.9-beta-research",
+  "version": "1.0.0",
+  "description": "TypeScript 5.9 Beta 技術調査プロジェクト",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "dev": "tsc --watch",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "example:conditional": "tsc conditional-types-example.ts --outDir dist && node dist/conditional-types-example.js",
+    "example:template": "tsc template-literal-types-example.ts --outDir dist && node dist/template-literal-types-example.js",
+    "example:performance": "tsc performance-improvements-example.ts --outDir dist && node dist/performance-improvements-example.js",
+    "example:breaking": "tsc breaking-changes-example.ts --outDir dist && node dist/breaking-changes-example.js",
+    "examples": "npm run example:conditional && npm run example:template && npm run example:performance && npm run example:breaking",
+    "prepare": "npm run build",
+    "test": "npm run type-check"
+  },
+  "keywords": [
+    "typescript",
+    "typescript-5.9",
+    "beta",
+    "research",
+    "conditional-types",
+    "template-literal-types",
+    "performance",
+    "breaking-changes"
+  ],
+  "author": "TypeScript Research Team",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.9.0-beta",
+    "@types/node": "^20.14.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yamanoku/technical-verification-from-calude-code"
+  },
+  "bugs": {
+    "url": "https://github.com/yamanoku/technical-verification-from-calude-code/issues"
+  },
+  "homepage": "https://github.com/yamanoku/technical-verification-from-calude-code#readme"
+}
