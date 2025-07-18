@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Tailwind HTML Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <!-- Test basic utility classes -->
+    <div class="bg-blue-500 text-white p-4 m-2">Basic utilities</div>
+    
+    <!-- Test class ordering (should trigger classnames-order rule) -->
+    <div class="p-4 bg-red-500 m-2 text-white">Unordered classes</div>
+    
+    <!-- Test contradicting classes (should trigger no-contradicting-classname) -->
+    <div class="bg-blue-500 bg-red-500 text-white p-4">Contradicting backgrounds</div>
+    
+    <!-- Test shorthand opportunities (should trigger enforces-shorthand) -->
+    <div class="padding-top-4 padding-bottom-4 padding-left-4 padding-right-4">Should use p-4 shorthand</div>
+    
+    <!-- Test arbitrary values -->
+    <div class="bg-[#ff6600] text-[20px] p-[15px]">Arbitrary values</div>
+    
+    <!-- Test unnecessary arbitrary values (should trigger no-unnecessary-arbitrary-value) -->
+    <div class="bg-[red] text-[16px] p-[4px]">Unnecessary arbitrary values</div>
+    
+    <!-- Test negative values -->
+    <div class="mt-[-20px] ml-[-10px]">Negative arbitrary values</div>
+    
+    <!-- Test custom classes (should be allowed due to configuration) -->
+    <div class="custom-component special-style">Custom classes</div>
+    
+    <!-- Test Tailwind v4 features if supported -->
+    <div class="bg-blue-500/50 shadow-lg/75">Opacity modifiers</div>
+    
+    <!-- Test responsive design -->
+    <div class="sm:bg-blue-500 md:bg-green-500 lg:bg-red-500 xl:bg-purple-500">Responsive classes</div>
+    
+    <!-- Test hover and focus states -->
+    <button class="bg-blue-500 hover:bg-blue-700 focus:ring-2 focus:ring-blue-300 px-4 py-2 text-white">Interactive button</button>
+</body>
+</html>

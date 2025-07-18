@@ -1,0 +1,25 @@
+{
+  "name": "eslint-plugin-tailwindcss-v4-investigation",
+  "version": "1.0.0",
+  "description": "Investigation of eslint-plugin-tailwindcss v4.0-beta.0 functionality",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx,.vue,.html",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx,.vue,.html --fix"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-plugin-tailwindcss": "4.0.0-beta.0",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "typescript": "^5.3.3"
+  },
+  "keywords": [
+    "eslint",
+    "tailwindcss",
+    "investigation",
+    "beta"
+  ],
+  "author": "Claude Code",
+  "license": "MIT"
+}
