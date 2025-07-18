@@ -145,40 +145,70 @@ npm run lint
 npm run lint:fix
 ```
 
-## 調査結果まとめ
+## 調査結果
 
-### 検出されるべきエラーパターン
+### テスト環境
 
-| ファイル | 行 | エラータイプ | 内容 |
-|---------|---|------------|------|
-| basic.html | - | classnames-order | クラスの順序不正 |
-| basic.html | - | no-contradicting-classname | 背景色の重複指定 |
-| basic.html | - | enforces-shorthand | padding個別指定 |
-| basic.html | - | no-unnecessary-arbitrary-value | 不要な任意値 |
-| React.jsx | - | classnames-order | ボタンクラスの順序 |
-| React.jsx | - | no-contradicting-classname | display系の競合 |
-| TypeScript.tsx | - | 各種エラーパターン | 意図的な問題のあるコード |
-| Vue.vue | - | 各種エラーパターン | 意図的な問題のあるコード |
+- **Node.js**: 最新バージョン
+- **ESLint**: v9.31.0 (フラット設定形式)
+- **サンプルファイル**: React JSX、TypeScript TSX、Vue SFC、HTML
 
-### v4.0-beta.0の評価ポイント
+### ✅ Tailwind CSS v3 互換性
 
-1. **✅ 期待される改善点**
-   - Tailwind CSS 4の新機能に対応
-   - より正確なクラス名検証
-   - パフォーマンス向上
+**設定:**
+- tailwindcss: v3.4.17
+- eslint-plugin-tailwindcss: v3.18.2 (安定版)
+- 従来のtailwind.config.js設定
 
-2. **⚠️ 注意すべき点**
-   - ベータ版のため、一部不安定な可能性
-   - 既存プロジェクトでの互換性確認が必要
-   - ドキュメント更新の遅れ
+**結果:**
+- ✅ ESLintルールが正常に動作
+- ✅ サンプルファイル全体で46個のクラス順序と競合クラス名のエラーを検出
+- ✅ すべてのTailwind CSSルールが期待通りに機能
+- ✅ React、TypeScript、Vueファイルをサポート
 
-3. **🔄 継続監視項目**
-   - 正式版リリースでの変更点
-   - コミュニティフィードバックの反映
-   - エコシステム全体との互換性
+### ❌ Tailwind CSS v4 互換性の問題
+
+**設定:**
+- tailwindcss: v4.1.11 (最新安定版)
+- eslint-plugin-tailwindcss: v4.0-beta.0
+- @configディレクティブを使用したCSS-first設定
+
+**結果:**
+- ❌ **致命的エラー**: `Could not resolve tailwindcss`
+- ❌ プラグインがTailwind CSS v4設定を読み込めない
+- ❌ 根本原因: tailwind-api-utils依存関係の非互換性
+
+### 技術的分析
+
+#### エラーの詳細
+```
+Error: Could not resolve tailwindcss
+    at TailwindUtils.loadConfigV4 (/path/to/tailwind-api-utils/dist/index.cjs:391:13)
+    at TailwindUtils.loadConfig (/path/to/tailwind-api-utils/dist/index.cjs:381:18)
+```
+
+#### 根本原因
+eslint-plugin-tailwindcss v4.0-beta.0が使用している`tailwind-api-utils`パッケージが、Tailwind CSS v4の新しいアーキテクチャと設定システムと完全に互換性がありません。
+
+### 推奨事項
+
+1. **本番環境での使用**: eslint-plugin-tailwindcss v3.18.2とTailwind CSS v3.4.17の組み合わせを継続使用
+2. **Tailwind CSS v4の使用**: v4を適切にサポートするeslint-plugin-tailwindcssの安定版リリースを待つ
+3. **ベータテスト**: v4.0-beta.0プラグインは、Tailwind CSS v4のCSS-firstアプローチをサポートするために、さらなる開発が必要
+
+### 使用した設定ファイル
+
+#### Tailwind CSS v3 セットアップ
+- 従来のJS設定による`tailwind.config.js`
+- 標準的なコンテンツパターンとテーマ拡張
+
+#### Tailwind CSS v4 セットアップ
+- @configディレクティブを使用した`tailwind.css`
+- CSS-first設定アプローチ
+- CSSファイルを指すようにESLint設定を更新
 
 ## 結論
 
-eslint-plugin-tailwindcss v4.0-beta.0は、Tailwind CSS 4への対応を図る重要なアップデートです。既存のルールセットは概ね機能すると予想されますが、新機能への対応と既存コードとの互換性について継続的な検証が必要です。
+eslint-plugin-tailwindcss v4.0-beta.0は、Tailwind CSS v4サポートに向けた進歩を示していますが、新しいTailwind CSS v4アーキテクチャとの根本的な互換性の問題により、本番環境での使用にはまだ準備が整っていません。
 
-プロダクション環境での使用前に、プロジェクト固有のコードベースでの十分なテストを推奨します。
+この調査により、現在のプロダクション環境ではeslint-plugin-tailwindcss v3.18.2とTailwind CSS v3.4.17の組み合わせを継続使用することが推奨されます。Tailwind CSS v4の採用は、プラグインが完全に対応した安定版がリリースされるまで待つことが安全です。
