@@ -40,8 +40,8 @@ export default [
     },
     settings: {
       tailwindcss: {
-        // Test with both Tailwind v3 and v4 configurations
-        config: './tailwind.config.js',
+        // Tailwind v4 CSS-first configuration
+        config: './tailwind.css',
         cssFiles: [
           '**/*.css',
           '!**/node_modules',
@@ -91,7 +91,7 @@ export default [
     },
     settings: {
       tailwindcss: {
-        config: './tailwind.config.js',
+        config: './tailwind.css',
         cssFiles: [
           '**/*.css',
           '!**/node_modules',
@@ -133,7 +133,7 @@ export default [
     },
     settings: {
       tailwindcss: {
-        config: './tailwind.config.js',
+        config: './tailwind.css',
         cssFiles: [
           '**/*.css',
           '!**/node_modules',
