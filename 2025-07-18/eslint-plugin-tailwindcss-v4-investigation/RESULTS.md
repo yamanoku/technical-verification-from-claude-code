@@ -1,71 +1,71 @@
-# eslint-plugin-tailwindcss v4.0-beta.0 Investigation Results
+# eslint-plugin-tailwindcss v4.0-beta.0 調査結果
 
-## Summary
+## 概要
 
-This investigation tested the compatibility of eslint-plugin-tailwindcss v4.0-beta.0 with both Tailwind CSS v3 and v4.
+この調査では、eslint-plugin-tailwindcss v4.0-beta.0 とTailwind CSS v3およびv4の互換性をテストしました。
 
-## Test Environment
+## テスト環境
 
-- **Node.js**: Latest available
-- **ESLint**: v9.31.0 (flat config format)
-- **Sample Files**: React JSX, TypeScript TSX, Vue SFC, HTML
+- **Node.js**: 最新バージョン
+- **ESLint**: v9.31.0 (フラット設定形式)
+- **サンプルファイル**: React JSX、TypeScript TSX、Vue SFC、HTML
 
-## Results
+## 結果
 
-### ✅ Tailwind CSS v3 Compatibility
+### ✅ Tailwind CSS v3 互換性
 
-**Configuration:**
+**設定:**
 - tailwindcss: v3.4.17
-- eslint-plugin-tailwindcss: v3.18.2 (stable)
-- Traditional tailwind.config.js configuration
+- eslint-plugin-tailwindcss: v3.18.2 (安定版)
+- 従来のtailwind.config.js設定
 
-**Results:**
-- ✅ ESLint rules work correctly
-- ✅ Detected 46 class ordering and conflicting classname errors across sample files
-- ✅ All Tailwind CSS rules functioning as expected
-- ✅ Supports React, TypeScript, and Vue files
+**結果:**
+- ✅ ESLintルールが正常に動作
+- ✅ サンプルファイル全体で46個のクラス順序と競合クラス名のエラーを検出
+- ✅ すべてのTailwind CSSルールが期待通りに機能
+- ✅ React、TypeScript、Vueファイルをサポート
 
-### ❌ Tailwind CSS v4 Compatibility Issues
+### ❌ Tailwind CSS v4 互換性の問題
 
-**Configuration:**
-- tailwindcss: v4.1.11 (latest stable)
+**設定:**
+- tailwindcss: v4.1.11 (最新安定版)
 - eslint-plugin-tailwindcss: v4.0-beta.0
-- CSS-first configuration with @config directive
+- @configディレクティブを使用したCSS-first設定
 
-**Results:**
-- ❌ **Fatal Error**: `Could not resolve tailwindcss`
-- ❌ Plugin unable to load Tailwind CSS v4 configuration
-- ❌ Root cause: tailwind-api-utils dependency incompatibility
+**結果:**
+- ❌ **致命的エラー**: `Could not resolve tailwindcss`
+- ❌ プラグインがTailwind CSS v4設定を読み込めない
+- ❌ 根本原因: tailwind-api-utils依存関係の非互換性
 
-## Technical Analysis
+## 技術的分析
 
-### Error Details
+### エラーの詳細
 ```
 Error: Could not resolve tailwindcss
     at TailwindUtils.loadConfigV4 (/path/to/tailwind-api-utils/dist/index.cjs:391:13)
     at TailwindUtils.loadConfig (/path/to/tailwind-api-utils/dist/index.cjs:381:18)
 ```
 
-### Root Cause
-The `tailwind-api-utils` package used by eslint-plugin-tailwindcss v4.0-beta.0 is not fully compatible with Tailwind CSS v4's new architecture and configuration system.
+### 根本原因
+eslint-plugin-tailwindcss v4.0-beta.0が使用している`tailwind-api-utils`パッケージが、Tailwind CSS v4の新しいアーキテクチャと設定システムと完全に互換性がありません。
 
-## Recommendations
+## 推奨事項
 
-1. **For Production Use**: Continue using eslint-plugin-tailwindcss v3.18.2 with Tailwind CSS v3.4.17
-2. **For Tailwind CSS v4**: Wait for stable release of eslint-plugin-tailwindcss that properly supports v4
-3. **Beta Testing**: The v4.0-beta.0 plugin requires further development to support Tailwind CSS v4's CSS-first approach
+1. **本番環境での使用**: eslint-plugin-tailwindcss v3.18.2とTailwind CSS v3.4.17の組み合わせを継続使用
+2. **Tailwind CSS v4の使用**: v4を適切にサポートするeslint-plugin-tailwindcssの安定版リリースを待つ
+3. **ベータテスト**: v4.0-beta.0プラグインは、Tailwind CSS v4のCSS-firstアプローチをサポートするために、さらなる開発が必要
 
-## Configuration Files Used
+## 使用した設定ファイル
 
-### Tailwind CSS v3 Setup
-- `tailwind.config.js` with traditional JS configuration
-- Standard content patterns and theme extensions
+### Tailwind CSS v3 セットアップ
+- 従来のJS設定による`tailwind.config.js`
+- 標準的なコンテンツパターンとテーマ拡張
 
-### Tailwind CSS v4 Setup  
-- `tailwind.css` with @config directive
-- CSS-first configuration approach
-- Updated ESLint settings to point to CSS file
+### Tailwind CSS v4 セットアップ
+- @configディレクティブを使用した`tailwind.css`
+- CSS-first設定アプローチ
+- CSSファイルを指すようにESLint設定を更新
 
-## Conclusion
+## 結論
 
-While eslint-plugin-tailwindcss v4.0-beta.0 represents progress towards Tailwind CSS v4 support, it is not yet ready for production use due to fundamental compatibility issues with the new Tailwind CSS v4 architecture.
+eslint-plugin-tailwindcss v4.0-beta.0は、Tailwind CSS v4サポートに向けた進歩を示していますが、新しいTailwind CSS v4アーキテクチャとの根本的な互換性の問題により、本番環境での使用にはまだ準備が整っていません。
