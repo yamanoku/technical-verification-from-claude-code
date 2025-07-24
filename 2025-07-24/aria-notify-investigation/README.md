@@ -19,20 +19,14 @@ ARIA Notify APIは、ウェブアクセシビリティを改善するためにMi
 
 ### 従来のARIA属性との比較
 
-以下の表は、従来のARIA live region属性とARIA Notify APIの比較を示しています：
+以下の表は、現在存在するWAI-ARIAの通知関連属性を示しています：
 
-| 項目 | 従来のARIA属性 | ARIA Notify API | 主な違い |
-|------|---------------|-----------------|----------|
-| **通知方法** | DOM要素の内容変更による間接的な通知 | JavaScript APIによる直接的な通知 | 直接制御 vs 間接制御 |
-| **aria-live** | `polite`: 割り込まない<br>`assertive`: 即座に割り込む<br>`off`: 通知しない | `priority: "normal"`: 通常優先度<br>`priority: "high"`: 高優先度 | より明確な優先度制御 |
-| **aria-atomic** | `true`: 要素全体を読み上げ<br>`false`: 変更部分のみ読み上げ | メッセージ文字列を直接指定 | 読み上げ内容の完全制御 |
-| **aria-relevant** | `additions`: 追加された要素<br>`removals`: 削除された要素<br>`text`: テキスト変更<br>`all`: すべての変更 | 通知したい内容を直接指定 | 変更検出 vs 意図的通知 |
-| **aria-busy** | `true`: 更新中（通知を一時停止）<br>`false`: 更新完了 | APIレベルでの制御（将来的に`interrupt`オプション） | より精密な制御 |
-| **実装の複雑さ** | HTML構造とCSS設定が必要<br>非表示要素の管理が必要 | 単純なJavaScript API呼び出し | 大幅な簡素化 |
-| **予測可能性** | スクリーンリーダーごとに動作が異なる | 統一された動作（仕様に準拠） | 一貫性の向上 |
-| **デバッグ** | DOM変更の追跡が困難<br>タイミング問題が発生しやすい | 明示的なAPI呼び出し<br>デバッグが容易 | 開発体験の向上 |
-| **パフォーマンス** | DOM操作とレンダリングが必要 | JavaScript関数呼び出しのみ | 軽量な実装 |
-| **使用例** | ```html<br><div aria-live="polite" aria-atomic="true"><br>  <!-- 動的コンテンツ --><br></div>``` | ```javascript<br>document.ariaNotify(<br>  "通知メッセージ",<br>  { priority: "normal" }<br>);``` | 宣言的 vs 命令的 |
+| API名 | ARIAで使用される値 | 具体的な用途 |
+|-------|------------------|--------------|
+| **aria-live** | `polite`: 現在の発話が終了後に通知<br>`assertive`: 即座に割り込んで通知<br>`off`: 通知しない（デフォルト） | 動的コンテンツの変更をスクリーンリーダーに通知する基本的な制御 |
+| **aria-atomic** | `true`: 要素全体を読み上げ<br>`false`: 変更部分のみ読み上げ（デフォルト） | live regionの内容が変更された際に、どの範囲を読み上げるかを制御 |
+| **aria-relevant** | `additions`: 追加された要素のみ<br>`removals`: 削除された要素のみ<br>`text`: テキスト変更のみ<br>`all`: すべての変更（デフォルト） | live region内でどの種類の変更を通知対象とするかを指定 |
+| **aria-busy** | `true`: 更新中のため通知を一時停止<br>`false`: 更新完了、通知可能（デフォルト） | 要素が更新処理中であることを示し、不完全な状態での通知を防ぐ |
 
 #### 具体的な比較例
 
