@@ -17,6 +17,62 @@ ARIA Notify APIは、ウェブアクセシビリティを改善するためにMi
 - **予測不可能な動作**
 - **本来の用途とは異なる使用による誤動作**
 
+### 従来のARIA属性との比較
+
+以下の表は、従来のARIA live region属性とARIA Notify APIの比較を示しています：
+
+| 項目 | 従来のARIA属性 | ARIA Notify API | 主な違い |
+|------|---------------|-----------------|----------|
+| **通知方法** | DOM要素の内容変更による間接的な通知 | JavaScript APIによる直接的な通知 | 直接制御 vs 間接制御 |
+| **aria-live** | `polite`: 割り込まない<br>`assertive`: 即座に割り込む<br>`off`: 通知しない | `priority: "normal"`: 通常優先度<br>`priority: "high"`: 高優先度 | より明確な優先度制御 |
+| **aria-atomic** | `true`: 要素全体を読み上げ<br>`false`: 変更部分のみ読み上げ | メッセージ文字列を直接指定 | 読み上げ内容の完全制御 |
+| **aria-relevant** | `additions`: 追加された要素<br>`removals`: 削除された要素<br>`text`: テキスト変更<br>`all`: すべての変更 | 通知したい内容を直接指定 | 変更検出 vs 意図的通知 |
+| **aria-busy** | `true`: 更新中（通知を一時停止）<br>`false`: 更新完了 | APIレベルでの制御（将来的に`interrupt`オプション） | より精密な制御 |
+| **実装の複雑さ** | HTML構造とCSS設定が必要<br>非表示要素の管理が必要 | 単純なJavaScript API呼び出し | 大幅な簡素化 |
+| **予測可能性** | スクリーンリーダーごとに動作が異なる | 統一された動作（仕様に準拠） | 一貫性の向上 |
+| **デバッグ** | DOM変更の追跡が困難<br>タイミング問題が発生しやすい | 明示的なAPI呼び出し<br>デバッグが容易 | 開発体験の向上 |
+| **パフォーマンス** | DOM操作とレンダリングが必要 | JavaScript関数呼び出しのみ | 軽量な実装 |
+| **使用例** | ```html<br><div aria-live="polite" aria-atomic="true"><br>  <!-- 動的コンテンツ --><br></div>``` | ```javascript<br>document.ariaNotify(<br>  "通知メッセージ",<br>  { priority: "normal" }<br>);``` | 宣言的 vs 命令的 |
+
+#### 具体的な比較例
+
+**従来のARIA live region:**
+```html
+<!-- HTML -->
+<div id="status" aria-live="polite" aria-atomic="true" 
+     style="position: absolute; left: -10000px;">
+</div>
+
+<script>
+// JavaScript
+function notifyUser(message) {
+    const statusDiv = document.getElementById('status');
+    statusDiv.textContent = message;
+    
+    // メッセージをクリアして再利用のために準備
+    setTimeout(() => {
+        statusDiv.textContent = '';
+    }, 1000);
+}
+</script>
+```
+
+**ARIA Notify API:**
+```javascript
+// JavaScript のみ
+function notifyUser(message) {
+    document.ariaNotify(message);
+}
+```
+
+#### 移行のメリット
+
+1. **簡素化**: HTML構造やCSS設定が不要
+2. **信頼性**: ブラウザ間での一貫した動作
+3. **保守性**: コードが読みやすく、デバッグが容易
+4. **パフォーマンス**: DOM操作が不要なため軽量
+5. **将来性**: 拡張可能な設計（SSML、点字対応など）
+
 ### 解決策
 
 ARIA Notify APIは、開発者がスクリーンリーダーに対して**直接的に何を読み上げるべきか**を指示できる命令型APIを提供します。
