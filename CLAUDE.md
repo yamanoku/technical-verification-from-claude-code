@@ -27,7 +27,8 @@ technical-verification-from-calude-code/
 ```
 
 ### .gitignore
-各プロジェクトディレクトリには、Git管理が不要なファイルを指定するための`.gitignore`ファイルを含めます。以下はその例です。
+各プロジェクトディレクトリにMarkdownファイル以外のソースコードが含まれたら、Git管理が不要なファイルを指定するための`.gitignore`ファイルを含めるようにしてください。
+以下はその例です。
 
 ```
 node_modules/
