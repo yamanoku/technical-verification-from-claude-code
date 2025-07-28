@@ -7,7 +7,13 @@
       "Bash(npm:*)",
       "Bash(npx:*)",
       "Bash(pnpm:*)",
-      "WebFetch(domain:github.com)"
+      "Bash(date:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:www.npmjs.com)",
+      "WebFetch(domain:jsr.io)",
+      "WebSearch(domain:github.com)",
+      "WebSearch(domain:www.npmjs.com)",
+      "WebSearch(domain:jsr.io)"
     ]
   }
 }
