@@ -59,19 +59,3 @@ jobs:
           # Optional: Custom environment variables for Claude
           # claude_env: |
           #   NODE_ENV: test
-
-            # MCP configuration
-          mcp_config: |
-            {
-              "servers": {
-                "gemini-google-search": {
-                  "command": "npx",
-                  "args": ["-y", "mcp-gemini-google-search"],
-                  "env": {
-                    "GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}",
-                    "GEMINI_MODEL": "gemini-2.5-flash"
-                  }
-                }
-              }
-            }
-          allowed_tools: "mcp__gemini-google-search__*"
