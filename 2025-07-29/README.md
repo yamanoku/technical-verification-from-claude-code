@@ -1,8 +1,8 @@
-# Nuxt、SvelteKit、AstroでのRouteAnnouncer制御方法 技術検証
+# 主要フロントエンドフレームワークでのRouteAnnouncer制御方法 技術検証
 
 ## 概要
 
-本検証では、3つの主要なフロントエンドフレームワーク（Nuxt、SvelteKit、Astro）の最新版におけるRouteAnnouncer機能について調査し、アクセシビリティ向上のための実装方法と制御方法をまとめました。
+本検証では、4つの主要なフロントエンドフレームワーク（Next.js、Nuxt、SvelteKit、Astro）の最新版におけるRouteAnnouncer機能について調査し、アクセシビリティ向上のための実装方法と制御方法をまとめました。
 
 検証日: 2025年7月29日
 
@@ -10,13 +10,167 @@
 
 | フレームワーク | バージョン | ビルトインRouteAnnouncer | 制御方法 | 実装難易度 |
 |----------------|------------|-------------------------|----------|------------|
+| **Next.js** | 15.4.4 | ✅ あり（自動生成） | 環境変数・カスタム実装 | 中〜高 |
 | **Nuxt** | 4.0.2 | ✅ あり (`<NuxtRouteAnnouncer>`) | 複数の制御方法 | 低 |
 | **SvelteKit** | 2.26.1 | ❌ なし | 手動実装が必要 | 中 |
 | **Astro** | 5.12.4 | ❌ なし | サードパーティライブラリ推奨 | 低〜中 |
 
 ## 各フレームワークの詳細調査結果
 
-### 1. Nuxt 4.0.2
+### 1. Next.js 15.4.4
+
+#### 機能概要
+- **ビルトインサポート**: Next.jsが自動的に提供するRouteAnnouncerコンポーネント
+- **自動初期化**: クライアントサイドで自動的に読み込まれる
+- **公式な制御オプションなし**: 直接的な無効化設定は提供されていない
+
+#### 制御方法
+
+##### 1. 環境変数による制御（推奨）
+```javascript
+// next.config.js
+const nextConfig = {
+  env: {
+    DISABLE_ROUTE_ANNOUNCER: process.env.NODE_ENV === 'test' ? 'true' : 'false'
+  }
+}
+
+module.exports = nextConfig
+```
+
+```jsx
+// hooks/useRouteAnnouncerControl.js
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+
+export function useRouteAnnouncerControl() {
+  const router = useRouter();
+  
+  useEffect(() => {
+    if (process.env.DISABLE_ROUTE_ANNOUNCER === 'true') {
+      const disableAnnouncer = () => {
+        const announcer = document.getElementById('__next-route-announcer__');
+        if (announcer) {
+          announcer.setAttribute('aria-live', 'off');
+          announcer.textContent = '';
+          announcer.style.display = 'none';
+        }
+      };
+      
+      setTimeout(disableAnnouncer, 0);
+      router.events.on('routeChangeComplete', disableAnnouncer);
+      
+      return () => router.events.off('routeChangeComplete', disableAnnouncer);
+    }
+  }, [router]);
+}
+```
+
+##### 2. MutationObserverによる確実な制御
+```jsx
+// hooks/useMutationRouteAnnouncerControl.js
+import { useEffect } from 'react';
+
+export function useMutationRouteAnnouncerControl(shouldDisable = false) {
+  useEffect(() => {
+    if (!shouldDisable) return;
+    
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'childList') {
+          const announcer = document.getElementById('__next-route-announcer__');
+          if (announcer) {
+            announcer.setAttribute('aria-live', 'off');
+            announcer.textContent = '';
+            announcer.style.display = 'none';
+          }
+        }
+      });
+    });
+    
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+    
+    return () => observer.disconnect();
+  }, [shouldDisable]);
+}
+```
+
+##### 3. カスタムRouteAnnouncerの実装
+```jsx
+// components/CustomRouteAnnouncer.jsx
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+
+export function CustomRouteAnnouncer({ 
+  enabled = true,
+  customMessages = {},
+  delay = 100,
+  mode = 'polite'
+}) {
+  const router = useRouter();
+  const [message, setMessage] = useState('');
+  
+  useEffect(() => {
+    if (!enabled || mode === 'off') return;
+    
+    const handleRouteChange = (url) => {
+      setTimeout(() => {
+        const pageTitle = document.title;
+        const customMessage = customMessages[url] || `ページが変更されました: ${pageTitle}`;
+        setMessage(customMessage);
+      }, delay);
+    };
+    
+    router.events.on('routeChangeComplete', handleRouteChange);
+    return () => router.events.off('routeChangeComplete', handleRouteChange);
+  }, [router, enabled, customMessages, delay, mode]);
+  
+  // デフォルトRouteAnnouncerを無効化
+  useEffect(() => {
+    const disableDefault = () => {
+      const defaultAnnouncer = document.getElementById('__next-route-announcer__');
+      if (defaultAnnouncer) {
+        defaultAnnouncer.style.display = 'none';
+        defaultAnnouncer.setAttribute('aria-live', 'off');
+      }
+    };
+    
+    disableDefault();
+    const interval = setInterval(disableDefault, 100);
+    return () => clearInterval(interval);
+  }, []);
+  
+  if (!enabled || mode === 'off') return null;
+  
+  return (
+    <div
+      id="custom-route-announcer"
+      aria-live={mode}
+      aria-atomic="true"
+      style={{
+        position: 'absolute',
+        left: '-10000px',
+        width: '1px',
+        height: '1px',
+        overflow: 'hidden'
+      }}
+    >
+      {message}
+    </div>
+  );
+}
+```
+
+#### 特徴
+- **制約の多さ**: 公式な制御オプションが存在しない
+- **実装の複雑さ**: 回避策が必要で実装が複雑
+- **アクセシビリティ重視**: フレームワークレベルでアクセシビリティを重視
+- **コミュニティ支援**: 多くの開発者が同様の課題に直面し、解決策を共有
+
+### 2. Nuxt 4.0.2
 
 #### 機能概要
 - **ビルトインサポート**: `<NuxtRouteAnnouncer>`コンポーネントを標準提供
@@ -70,7 +224,7 @@ announcer.politeness = "assertive"
 - **包括的テストカバレッジ**
 - **柔軟なカスタマイズ性**
 
-### 2. SvelteKit 2.26.1
+### 3. SvelteKit 2.26.1
 
 #### 機能概要
 - **ビルトイン機能なし**: フレームワーク標準ではRouteAnnouncer提供なし
@@ -139,7 +293,7 @@ export function announceRoute(message, politeness = 'polite') {
 - **ユーザー設定による制御**: LocalStorage連携
 - **動的な有効/無効切り替え**: ストア経由
 
-### 3. Astro 5.12.4
+### 4. Astro 5.12.4
 
 #### 機能概要
 - **ビルトイン機能なし**: フレームワーク標準ではRouteAnnouncer提供なし
@@ -220,6 +374,14 @@ npm install @vue-a11y/announcer
 
 ## 実装推奨度とガイドライン
 
+### Next.js
+- **推奨度**: ★★★☆☆ (中程度)
+- **理由**: 公式制御オプションがないため回避策が必要
+- **ベストプラクティス**: 
+  - 環境変数による制御で開発・テスト環境での無効化
+  - アクセシビリティを考慮したカスタム実装
+  - MutationObserverでの確実な制御
+
 ### Nuxt
 - **推奨度**: ★★★★★ (最高)
 - **理由**: ビルトイン機能により簡単に実装・制御可能
@@ -252,17 +414,19 @@ npm install @vue-a11y/announcer
 - **プライバシー**: アナウンス内容に個人情報を含めない
 
 ### フレームワーク固有
+- **Next.js**: DOM操作による制御時のメモリリーク対策、MutationObserverの適切な管理
 - **Nuxt**: ビルトイン機能のため追加のセキュリティ対策は最小限
 - **SvelteKit**: 手動実装時のDOMアクセスに注意
 - **Astro**: サードパーティライブラリの定期的なアップデート必須
 
 ## 結論
 
-3つのフレームワークにおけるRouteAnnouncer制御方法の調査結果：
+4つのフレームワークにおけるRouteAnnouncer制御方法の調査結果：
 
-1. **Nuxt**: 最も充実したビルトイン機能を提供し、複数の制御方法で柔軟にカスタマイズ可能
-2. **SvelteKit**: 手動実装が必要だが、フレームワークの設計思想に沿った高い自由度を提供
-3. **Astro**: サードパーティライブラリ（@swup/astro）により実用的なソリューションが利用可能
+1. **Next.js**: ビルトイン機能はあるが公式制御オプションなし、回避策による制御が必要
+2. **Nuxt**: 最も充実したビルトイン機能を提供し、複数の制御方法で柔軟にカスタマイズ可能
+3. **SvelteKit**: 手動実装が必要だが、フレームワークの設計思想に沿った高い自由度を提供
+4. **Astro**: サードパーティライブラリ（@swup/astro）により実用的なソリューションが利用可能
 
 各フレームワークの特性に応じて、適切な実装アプローチを選択することで、効果的なアクセシビリティ向上が実現できることが確認されました。
 
