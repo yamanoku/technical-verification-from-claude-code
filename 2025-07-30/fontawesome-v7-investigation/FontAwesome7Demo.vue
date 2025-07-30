@@ -127,6 +127,31 @@
       </div>
     </section>
 
+    <!-- title prop 検証 -->
+    <section>
+      <h3>title プロパティ検証（Font Awesome v7制限あり）</h3>
+      
+      <div class="demo-item">
+        <code>title (制限あり)</code>
+        <p class="warning">⚠️ Font Awesome v7では title prop の動作が制限されています</p>
+        <font-awesome-icon :icon="faHome" title="ホームアイコン" />
+        <font-awesome-icon :icon="faHeart" title="ハートアイコン" />
+        <font-awesome-icon :icon="faUser" title="ユーザーアイコン" />
+      </div>
+      
+      <div class="demo-item">
+        <code>title + titleId</code>
+        <font-awesome-icon :icon="faInfoCircle" title="情報アイコン" titleId="info-icon-title" />
+      </div>
+      
+      <div class="demo-item">
+        <code>代替案: aria-label</code>
+        <p class="info">💡 v7では aria-label の使用を推奨</p>
+        <font-awesome-icon :icon="faWarning" aria-label="警告アイコン" />
+        <font-awesome-icon :icon="faCheck" aria-label="チェックアイコン" />
+      </div>
+    </section>
+
     <!-- スタイル関連 -->
     <section>
       <h3>スタイル関連プロパティ</h3>
@@ -156,7 +181,11 @@ import {
   faQuoteRight,
   faUserPlus,
   faPen,
-  faCircle
+  faCircle,
+  faUser,
+  faInfoCircle,
+  faExclamationTriangle as faWarning,
+  faCheck
 } from '@fortawesome/free-solid-svg-icons'
 </script>
 
@@ -195,5 +224,23 @@ section {
   padding: 15px;
   background: #fafafa;
   border-radius: 8px;
+}
+
+.warning {
+  color: #d04e00;
+  background: #fff3cd;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border-left: 4px solid #ffa500;
+  margin: 5px 0;
+}
+
+.info {
+  color: #0c5460;
+  background: #d1ecf1;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border-left: 4px solid #17a2b8;
+  margin: 5px 0;
 }
 </style>

@@ -36,6 +36,37 @@ icon: object | Array<string> | string | IconDefinition
 <font-awesome-icon :icon="['fab', 'github']" />
 ```
 
+### オプショナルプロパティ
+
+#### `title` プロパティ（重要な制限あり）
+
+vue-fontawesomeでは `title` プロパティがオプショナルで定義されていますが、**Font Awesome v7では重要な制限があります**。
+
+**TypeScript定義**:
+```typescript
+title?: string      // ツールチップ・アクセシビリティ用のタイトル
+titleId?: string    // タイトル要素のID
+```
+
+**⚠️ Font Awesome v7での制限**:
+- vue-fontawesomeのソースコードによると、`title`属性は**Font Awesome v7.0.0より前のバージョンでのみ適用される**
+- Font Awesome v7.0.0以降では、`title` propが期待通りに動作しない可能性がある
+
+**使用例**:
+```vue
+<!-- v6以前では正常に動作 -->
+<font-awesome-icon :icon="faHome" title="ホームアイコン" />
+<font-awesome-icon :icon="faUser" title="ユーザーアイコン" titleId="user-icon-title" />
+
+<!-- v7での推奨代替案 -->
+<font-awesome-icon :icon="faHome" aria-label="ホームアイコン" />
+```
+
+**Font Awesome v7での推奨事項**:
+- `title` propの代わりに `aria-label` 属性を使用
+- アクセシビリティが重要な場合は追加のスクリーンリーダー対応を検討
+- ツールチップが必要な場合は、CSSやJavaScriptによる独自実装を検討
+
 ## 🆕 Font Awesome v7の新機能
 
 ### 新アニメーション（7種類）
@@ -148,3 +179,4 @@ Font Awesome v7は後方互換性を完全に維持しながら、新しいア�
 - ✅ v7新機能の動作確認: 7種類の新アニメーション
 - ✅ Vue.jsでの実装動作確認: 正常動作
 - ✅ 移行手順の確認: パッケージ更新のみで完了
+- ✅ `title` propの動作調査: v7では制限あり、`aria-label`代替推奨
