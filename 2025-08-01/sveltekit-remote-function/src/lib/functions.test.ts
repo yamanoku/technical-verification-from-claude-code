@@ -1,6 +1,6 @@
 // Remote Functions のテストケース例
 import { describe, it, expect, vi } from 'vitest';
-import { getUsers, getUserById, createUser, updateUser, contactForm } from './functions.remote';
+import { getUsers, getUserById, createUser, updateUser } from './functions.remote';
 
 // モックタイマーを使用して非同期処理をテスト
 vi.useFakeTimers();
@@ -137,56 +137,9 @@ describe('Remote Functions Tests', () => {
     });
   });
   
-  describe('contactForm (Form)', () => {
-    it('有効なフォームデータで正常に送信', async () => {
-      const formData = new FormData();
-      formData.append('name', 'テスト太郎');
-      formData.append('email', 'test@example.com');
-      formData.append('message', 'これはテストメッセージです。10文字以上の内容になっています。');
-      
-      // NOTE: Remote Form functions cannot be called directly in tests
-      expect(contactForm).toBeDefined();
-      // Form testing removed
-      
-      // Form testing removed
-    });
-    
-    it('名前が空の場合エラーを投げる', async () => {
-      const formData = new FormData();
-      formData.append('name', '');
-      formData.append('email', 'test@example.com');
-      formData.append('message', 'テストメッセージです。');
-      
-      // NOTE: Remote Form functions cannot be called directly in tests
-      expect(contactForm).toBeDefined();
-      
-      // Test removed - forms cannot be tested directly('お名前を入力してください');
-    });
-    
-    it('無効なメールアドレスでエラーを投げる', async () => {
-      const formData = new FormData();
-      formData.append('name', 'テスト太郎');
-      formData.append('email', 'invalid-email');
-      formData.append('message', 'テストメッセージです。10文字以上の内容。');
-      
-      // NOTE: Remote Form functions cannot be called directly in tests
-      expect(contactForm).toBeDefined();
-      
-      // Test removed - forms cannot be tested directly('有効なメールアドレスを入力してください');
-    });
-    
-    it('メッセージが短すぎる場合エラーを投げる', async () => {
-      const formData = new FormData();
-      formData.append('name', 'テスト太郎');
-      formData.append('email', 'test@example.com');
-      formData.append('message', '短い');
-      
-      // NOTE: Remote Form functions cannot be called directly in tests
-      expect(contactForm).toBeDefined();
-      
-      // Test removed - forms cannot be tested directly('メッセージは10文字以上で入力してください');
-    });
-  });
+  // NOTE: contactForm (Form) テストは削除
+  // Remote Form functions はブラウザ環境でのみ動作するため、
+  // 単体テストでは実行できません
 });
 
 // エラーハンドリングのテスト

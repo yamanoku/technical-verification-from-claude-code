@@ -1,5 +1,5 @@
 <script>
-  import { contactForm } from '$lib/functions.remote';
+  import { contactForm } from '$lib/forms.remote';
   import { enhance } from '$app/forms';
   
   let formElement;

@@ -1,5 +1,5 @@
-// Remote Functions の実装例
-import { query, command, form } from '$app/server';
+// Remote Functions の実装例 (Query/Command)
+import { query, command } from '$app/server';
 
 // データ取得用のQuery - キャッシュ機能付き
 export const getUsers = query(async () => {
@@ -70,34 +70,7 @@ export const updateUser = command("unchecked", async ({ id, userData }: { id: nu
 	return updatedUser;
 });
 
-// フォーム処理用のForm - プログレッシブエンハンスメント対応
-export const contactForm = form(async (formData: FormData) => {
-	const name = formData.get('name') as string;
-	const email = formData.get('email') as string;
-	const message = formData.get('message') as string;
-	
-	// バリデーション
-	if (!name || name.trim().length === 0) {
-		throw new Error('お名前を入力してください');
-	}
-	
-	if (!email || !email.includes('@')) {
-		throw new Error('有効なメールアドレスを入力してください');
-	}
-	
-	if (!message || message.trim().length < 10) {
-		throw new Error('メッセージは10文字以上で入力してください');
-	}
-	
-	// フォーム送信処理をシmiュレート
-	await new Promise(resolve => setTimeout(resolve, 1500));
-	
-	return {
-		success: true,
-		message: 'お問い合わせを受け付けました。ありがとうございます。',
-		submittedAt: new Date().toISOString()
-	};
-});
+// NOTE: フォーム処理は forms.remote.ts に分離
 
 // 統計データ取得（重い処理の例）
 export const getStatistics = query(async () => {
