@@ -1,5 +1,5 @@
 // Remote Functions の実装例
-import { query, command, form } from '@sveltejs/kit/remote';
+import { query, command, form } from '$app/server';
 
 // データ取得用のQuery - キャッシュ機能付き
 export const getUsers = query(async () => {

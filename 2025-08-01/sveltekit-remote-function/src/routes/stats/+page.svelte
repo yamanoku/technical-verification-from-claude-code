@@ -1,5 +1,5 @@
 <script>
-  import { getStatistics } from '$lib/functions.js';
+  import { getStatistics } from '$lib/functions.remote.js';
   
   let statisticsPromise = getStatistics();
   

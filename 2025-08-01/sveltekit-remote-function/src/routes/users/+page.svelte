@@ -1,5 +1,5 @@
 <script>
-  import { getUsers, getUserById, createUser, updateUser } from '$lib/functions.js';
+  import { getUsers, getUserById, createUser, updateUser } from '$lib/functions.remote.js';
   
   let usersPromise = getUsers();
   let selectedUserId = null;

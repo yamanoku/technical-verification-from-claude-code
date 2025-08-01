@@ -1,6 +1,6 @@
 // Remote Functions のテストケース例
 import { describe, it, expect, vi } from 'vitest';
-import { getUsers, getUserById, createUser, updateUser, contactForm } from './functions.js';
+import { getUsers, getUserById, createUser, updateUser, contactForm } from './functions.remote.js';
 
 // モックタイマーを使用して非同期処理をテスト
 vi.useFakeTimers();
