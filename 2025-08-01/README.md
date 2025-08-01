@@ -51,17 +51,6 @@ export const createUser = command("unchecked", async (userData: CreateUserData) 
 - 楽観的アップデート対応
 - トランザクション処理
 
-#### 3. Form - フォーム処理
-```typescript
-import { form } from '$app/server';
-
-export const contactForm = form(async (formData: FormData) => {
-  const name = formData.get('name') as string;
-  // フォームデータの処理
-  return { success: true, message: '送信完了' };
-});
-```
-
 **特徴:**
 - プログレッシブエンハンスメント対応
 - 自動CSRF保護
@@ -174,8 +163,7 @@ Query機能は自動的に結果をキャッシュし、以下の利点を提供
 ```
 src/
 ├── lib/
-│   ├── functions.remote.ts    # Query/Command関数
-│   └── forms.remote.ts        # Form関数（分離）
+│   └── functions.remote.ts   # Query/Command関数
 └── routes/
     ├── +page.svelte          # ホーム
     ├── users/+page.svelte    # ユーザー管理
@@ -199,52 +187,6 @@ export const createUser = command("unchecked", async (data: UserCreateData) => {
   
   return await db.users.create({ data });
 });
-```
-
-### フォーム処理の分離
-
-```typescript
-// lib/forms.remote.ts（新規追加）
-export const contactForm = form(async (formData: FormData) => {
-  const name = formData.get('name') as string;
-  const email = formData.get('email') as string;
-  const message = formData.get('message') as string;
-  
-  // バリデーション処理
-  if (!name || name.trim().length === 0) {
-    throw new Error('お名前を入力してください');
-  }
-  
-  return {
-    success: true,
-    message: 'お問い合わせを受け付けました。',
-    submittedAt: new Date().toISOString()
-  };
-});
-```
-
-```svelte
-<!-- routes/users/+page.svelte -->
-<script>
-  import { getUsers, createUser } from '$lib/functions.remote.js';
-  
-  let usersPromise = getUsers();
-  
-  async function handleCreate(userData) {
-    await createUser(userData);
-    usersPromise = getUsers(); // リストを更新
-  }
-</script>
-
-{#await usersPromise}
-  <div class="loading">読み込み中...</div>
-{:then users}
-  {#each users as user}
-    <div>{user.name} - {user.email}</div>
-  {/each}
-{:catch error}
-  <div class="error">{error.message}</div>
-{/await}
 ```
 
 ## テストについて
@@ -377,23 +319,7 @@ export const optimisticUpdate = command(async (id: number, data: UpdateData) => 
 });
 ```
 
-## 今後の展望
-
-### ロードマップ
-
-1. **短期（3-6ヶ月）**
-   - 新規プロジェクトでの積極採用
-   - 開発チームの学習とベストプラクティス確立
-
-2. **中期（6-12ヶ月）**
-   - 既存プロジェクトの段階的移行
-   - パフォーマンス最適化とモニタリング
-
-3. **長期（1年以上）**
-   - マイクロサービス連携の強化
-   - エッジコンピューティング対応
-
-### 期待される効果
+## 期待される効果
 
 - **開発効率**: 30-50%の開発時間短縮
 - **バグ削減**: 型安全性による実行時エラーの削減
