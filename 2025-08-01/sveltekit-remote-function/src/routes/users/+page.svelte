@@ -1,17 +1,23 @@
-<script>
+<script lang="ts">
   import { getUsers, getUserById, createUser, updateUser } from '$lib/functions.remote';
   
+  type User = {
+    id: number;
+    name: string;
+    email: string;
+  };
+  
   let usersPromise = getUsers();
-  let selectedUserId = null;
-  let selectedUserPromise = null;
+  let selectedUserId: number | null = null;
+  let selectedUserPromise: ReturnType<typeof getUserById> | null = null;
   let newUserName = '';
   let newUserEmail = '';
-  let createUserPromise = null;
-  let updateUserPromise = null;
+  let createUserPromise: Promise<User | null> | null = null;
+  let updateUserPromise: Promise<User | null> | null = null;
   let updateUserName = '';
   let updateUserEmail = '';
   
-  function selectUser(id) {
+  function selectUser(id: number) {
     selectedUserId = id;
     selectedUserPromise = getUserById(id);
   }
@@ -29,7 +35,7 @@
       });
       
       const result = await createUserPromise;
-      alert(`ユーザー「${result.name}」を作成しました（ID: ${result.id}）`);
+      alert(`ユーザー「${result?.name}」を作成しました（ID: ${result?.id}）`);
       
       // フォームをリセット
       newUserName = '';
@@ -38,8 +44,8 @@
       // ユーザーリストを更新
       usersPromise = getUsers();
       
-    } catch (error) {
-      alert(`エラー: ${error.message}`);
+    } catch (error: unknown) {
+      alert(`エラー: ${error instanceof Error ? error.message : String(error)}`);
     } finally {
       createUserPromise = null;
     }
@@ -61,7 +67,7 @@
       });
       
       const result = await updateUserPromise;
-      alert(`ユーザーを更新しました: ${result.name}`);
+      alert(`ユーザーを更新しました: ${result?.name}`);
       
       // フォームをリセット
       updateUserName = '';
@@ -70,8 +76,8 @@
       // 選択中のユーザー情報を更新
       selectedUserPromise = getUserById(selectedUserId);
       
-    } catch (error) {
-      alert(`エラー: ${error.message}`);
+    } catch (error: unknown) {
+      alert(`エラー: ${error instanceof Error ? error.message : String(error)}`);
     } finally {
       updateUserPromise = null;
     }
@@ -126,7 +132,7 @@
         <div class="user-detail">
           <h3>{user.name}</h3>
           <p><strong>メール:</strong> {user.email}</p>
-          <p><strong>権限:</strong> {user.role}</p>
+          <p><strong>権限:</strong> {user.role === 'admin' || user.role === 'user' ? user.role : '不明'}</p>
           <p><strong>ID:</strong> {user.id}</p>
         </div>
       {:catch error}

@@ -3,10 +3,6 @@
   
   // Remote Function (Query) の使用例
   let usersPromise = getUsers();
-  
-  function refreshUsers() {
-    usersPromise = getUsers();
-  }
 </script>
 
 <svelte:head>
@@ -36,7 +32,7 @@
     <h2>実装例：Query - ユーザーリスト取得</h2>
     <p>以下は、Remote Function (Query) を使用してユーザーリストを取得する例です：</p>
     
-    <button class="button" on:click={refreshUsers}>
+    <button class="button" onclick={() => getUsers().refresh()}>
       ユーザーリストを更新
     </button>
     

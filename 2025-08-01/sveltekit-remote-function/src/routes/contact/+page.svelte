@@ -1,17 +1,16 @@
-<script>
-  import { contactForm } from '$lib/forms.remote';
+<script lang="ts">
   import { enhance } from '$app/forms';
   
-  let formElement;
-  let submissionResult = null;
+  let formElement: HTMLFormElement | null = null;
+  let submissionResult: { success: any; message: any; submittedAt: string | number | Date; } | null = null;
   let isSubmitting = false;
   
   // フォーム送信結果の処理
-  function handleResult(result) {
-    submissionResult = result;
+  function handleResult(result: Record<string, unknown> | undefined) {
+    submissionResult = result as { success: any; message: any; submittedAt: string | number | Date; } | null;
     isSubmitting = false;
-    if (result.success) {
-      formElement.reset();
+    if (result?.success) {
+      formElement?.reset();
     }
   }
 </script>
@@ -53,7 +52,7 @@
   
   <!-- フォーム -->
   <div class="card">
-    <h2>📬 お問い合わせフォーム</h2>
+    <h2>お問い合わせフォーム</h2>
     
     <form 
       bind:this={formElement}
@@ -69,7 +68,6 @@
           }
         };
       }}
-      action={contactForm}
       method="POST"
     >
       <div class="form-group">
