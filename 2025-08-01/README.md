@@ -18,7 +18,7 @@ Remote Functionsは、サーバーサイド関数をクライアントから直�
 
 #### 1. Query - データ取得
 ```typescript
-import { query } from '@sveltejs/kit/remote';
+import { query } from '$app/server';
 
 export const getUsers = query(async () => {
   // データベースからユーザーリストを取得
@@ -34,9 +34,9 @@ export const getUsers = query(async () => {
 
 #### 2. Command - データ変更
 ```typescript
-import { command } from '@sveltejs/kit/remote';
+import { command } from '$app/server';
 
-export const createUser = command(async (userData: CreateUserData) => {
+export const createUser = command("unchecked", async (userData: CreateUserData) => {
   // バリデーション
   validateUserData(userData);
   
@@ -53,7 +53,7 @@ export const createUser = command(async (userData: CreateUserData) => {
 
 #### 3. Form - フォーム処理
 ```typescript
-import { form } from '@sveltejs/kit/remote';
+import { form } from '$app/server';
 
 export const contactForm = form(async (formData: FormData) => {
   const name = formData.get('name') as string;
@@ -70,7 +70,7 @@ export const contactForm = form(async (formData: FormData) => {
 
 #### 4. Prerender - プリレンダリング
 ```typescript
-import { prerender } from '@sveltejs/kit/remote';
+import { prerender } from '$app/server';
 
 export const getStaticData = prerender(async () => {
   // ビルド時に実行される処理
@@ -111,14 +111,16 @@ export const getStaticData = prerender(async () => {
 Remote Functionsは、TypeScriptによる完全な型推論を提供します：
 
 ```typescript
-// サーバーサイド
-export const getUser = query(async (id: number) => {
+// サーバーサイド（引数付き関数には"unchecked"が必要）
+export const getUser = query("unchecked", async (id: number) => {
   return { id, name: 'John', email: 'john@example.com' };
 });
 
 // クライアントサイド - 型が自動推論される
 const user = await getUser(1); // user の型は自動的に推論される
 ```
+
+**重要な変更:** SvelteKit v2.27.0では、引数を持つquery/command関数には第一引数として`"unchecked"`パラメータが必須になりました。これにより、型安全性を保ちながらより柔軟な関数定義が可能になります。
 
 ### エラーハンドリング
 
@@ -167,15 +169,29 @@ Query機能は自動的に結果をキャッシュし、以下の利点を提供
 
 ## 実装例詳細
 
+### プロジェクト構成
+
+```
+src/
+├── lib/
+│   ├── functions.remote.ts    # Query/Command関数
+│   └── forms.remote.ts        # Form関数（分離）
+└── routes/
+    ├── +page.svelte          # ホーム
+    ├── users/+page.svelte    # ユーザー管理
+    ├── contact/+page.svelte  # お問い合わせ
+    └── stats/+page.svelte    # 統計ダッシュボード
+```
+
 ### ユーザー管理システム
 
 ```typescript
-// lib/user-functions.ts
+// lib/functions.remote.ts
 export const getUsers = query(async () => {
   return await db.users.findMany();
 });
 
-export const createUser = command(async (data: UserCreateData) => {
+export const createUser = command("unchecked", async (data: UserCreateData) => {
   // バリデーション
   if (!data.email.includes('@')) {
     throw new Error('有効なメールアドレスが必要です');
@@ -185,10 +201,32 @@ export const createUser = command(async (data: UserCreateData) => {
 });
 ```
 
+### フォーム処理の分離
+
+```typescript
+// lib/forms.remote.ts（新規追加）
+export const contactForm = form(async (formData: FormData) => {
+  const name = formData.get('name') as string;
+  const email = formData.get('email') as string;
+  const message = formData.get('message') as string;
+  
+  // バリデーション処理
+  if (!name || name.trim().length === 0) {
+    throw new Error('お名前を入力してください');
+  }
+  
+  return {
+    success: true,
+    message: 'お問い合わせを受け付けました。',
+    submittedAt: new Date().toISOString()
+  };
+});
+```
+
 ```svelte
 <!-- routes/users/+page.svelte -->
 <script>
-  import { getUsers, createUser } from '$lib/user-functions.js';
+  import { getUsers, createUser } from '$lib/functions.remote.js';
   
   let usersPromise = getUsers();
   
@@ -209,34 +247,24 @@ export const createUser = command(async (data: UserCreateData) => {
 {/await}
 ```
 
-## テストケース
+## テストについて
 
-### 単体テスト例
+**注意:** Remote Functions機能はSvelteKitの完全なランタイム環境が必要なため、従来の単体テストフレームワーク（vitest等）では直接テストすることができません。この制約は、Remote Functionsがブラウザ・サーバー間の通信を前提とした設計になっているためです。
 
-```typescript
-import { describe, it, expect } from 'vitest';
-import { getUsers, createUser } from './functions.js';
+### 推奨テスト手法
 
-describe('User Functions', () => {
-  it('should return user list', async () => {
-    const users = await getUsers();
-    expect(users).toBeInstanceOf(Array);
-  });
-  
-  it('should create user with valid data', async () => {
-    const userData = { name: 'Test', email: 'test@example.com' };
-    const result = await createUser(userData);
-    expect(result.id).toBeDefined();
-  });
-  
-  it('should throw error for invalid email', async () => {
-    const userData = { name: 'Test', email: 'invalid' };
-    await expect(createUser(userData)).rejects.toThrow();
-  });
-});
-```
+1. **E2Eテスト（推奨）**
+   - Playwright や Cypress を使用したブラウザテスト
+   - 実際のユーザー操作をシミュレート
 
-### 統合テスト
+2. **個別関数のロジックテスト**
+   - Remote Function内のビジネスロジック部分を別関数に分離
+   - 分離した関数に対して単体テストを実施
+
+3. **統合テスト**
+   - 開発サーバーを起動した状態でのテスト実行
+
+### E2Eテスト例
 
 ```typescript
 // E2Eテストでの使用例
