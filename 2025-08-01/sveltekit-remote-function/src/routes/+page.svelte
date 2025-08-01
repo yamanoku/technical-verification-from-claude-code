@@ -1,5 +1,5 @@
 <script>
-  import { getUsers } from '$lib/functions.remote.js';
+  import { getUsers } from '$lib/functions.remote';
   
   // Remote Function (Query) の使用例
   let usersPromise = getUsers();

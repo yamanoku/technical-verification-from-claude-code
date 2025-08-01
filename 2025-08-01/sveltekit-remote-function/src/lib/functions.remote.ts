@@ -14,7 +14,7 @@ export const getUsers = query(async () => {
 });
 
 // IDによるユーザー取得
-export const getUserById = query(async (id: number) => {
+export const getUserById = query("unchecked", async (id: number) => {
 	await new Promise(resolve => setTimeout(resolve, 500));
 	
 	const users = [
@@ -32,7 +32,7 @@ export const getUserById = query(async (id: number) => {
 });
 
 // データ変更用のCommand - 非同期処理対応
-export const createUser = command(async (userData: { name: string; email: string }) => {
+export const createUser = command("unchecked", async (userData: { name: string; email: string }) => {
 	// バリデーション
 	if (!userData.name || userData.name.trim().length === 0) {
 		throw new Error('名前は必須です');
@@ -56,7 +56,7 @@ export const createUser = command(async (userData: { name: string; email: string
 });
 
 // ユーザー更新
-export const updateUser = command(async (id: number, userData: { name?: string; email?: string }) => {
+export const updateUser = command("unchecked", async ({ id, userData }: { id: number; userData: { name?: string; email?: string } }) => {
 	await new Promise(resolve => setTimeout(resolve, 800));
 	
 	// 更新処理をシミュレート

@@ -1,31 +1,17 @@
 <script>
-  import { contactForm } from '$lib/functions.remote.js';
+  import { contactForm } from '$lib/functions.remote';
   import { enhance } from '$app/forms';
   
   let formElement;
-  let submissionPromise = null;
   let submissionResult = null;
+  let isSubmitting = false;
   
-  // Remote Function (Form) の使用例
-  async function handleSubmit(event) {
-    const formData = new FormData(event.target);
-    
-    try {
-      submissionPromise = contactForm(formData);
-      submissionResult = await submissionPromise;
-      
-      // 成功時はフォームをリセット
-      if (submissionResult.success) {
-        formElement.reset();
-      }
-      
-    } catch (error) {
-      submissionResult = { 
-        success: false, 
-        message: error.message 
-      };
-    } finally {
-      submissionPromise = null;
+  // フォーム送信結果の処理
+  function handleResult(result) {
+    submissionResult = result;
+    isSubmitting = false;
+    if (result.success) {
+      formElement.reset();
     }
   }
 </script>
@@ -71,7 +57,19 @@
     
     <form 
       bind:this={formElement}
-      on:submit|preventDefault={handleSubmit}
+      use:enhance={({ formData, cancel }) => {
+        isSubmitting = true;
+        return async ({ result }) => {
+          if (result.type === 'success') {
+            handleResult(result.data);
+          } else if (result.type === 'failure') {
+            handleResult({ success: false, message: result.data?.message || 'エラーが発生しました' });
+          } else {
+            isSubmitting = false;
+          }
+        };
+      }}
+      action={contactForm}
       method="POST"
     >
       <div class="form-group">
@@ -112,9 +110,9 @@
       <button 
         class="button" 
         type="submit"
-        disabled={!!submissionPromise}
+        disabled={!!isSubmitting}
       >
-        {#if submissionPromise}
+        {#if isSubmitting}
           送信中...
         {:else}
           送信する
@@ -122,11 +120,9 @@
       </button>
     </form>
     
-    {#if submissionPromise}
+    {#if isSubmitting}
       <div style="margin-top: 1rem;">
-        {#await submissionPromise}
-          <div class="loading">お問い合わせを送信中...</div>
-        {/await}
+        <div class="loading">お問い合わせを送信中...</div>
       </div>
     {/if}
   </div>

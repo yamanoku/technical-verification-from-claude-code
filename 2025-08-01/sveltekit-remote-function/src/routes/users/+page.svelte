@@ -1,5 +1,5 @@
 <script>
-  import { getUsers, getUserById, createUser, updateUser } from '$lib/functions.remote.js';
+  import { getUsers, getUserById, createUser, updateUser } from '$lib/functions.remote';
   
   let usersPromise = getUsers();
   let selectedUserId = null;
@@ -52,9 +52,12 @@
     }
     
     try {
-      updateUserPromise = updateUser(selectedUserId, {
-        name: updateUserName || undefined,
-        email: updateUserEmail || undefined
+      updateUserPromise = updateUser({
+        id: selectedUserId,
+        userData: {
+          name: updateUserName || undefined,
+          email: updateUserEmail || undefined
+        }
       });
       
       const result = await updateUserPromise;
