@@ -8,6 +8,7 @@
       "Bash(npx:*)",
       "Bash(pnpm:*)",
       "Bash(date:*)",
+      "Bash(gh:*)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:www.npmjs.com)",
       "WebFetch(domain:jsr.io)",
