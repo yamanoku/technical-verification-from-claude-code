@@ -1,18 +1,5 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
-  
-  let formElement: HTMLFormElement | null = null;
-  let submissionResult: { success: any; message: any; submittedAt: string | number | Date; } | null = null;
-  let isSubmitting = false;
-  
-  // フォーム送信結果の処理
-  function handleResult(result: Record<string, unknown> | undefined) {
-    submissionResult = result as { success: any; message: any; submittedAt: string | number | Date; } | null;
-    isSubmitting = false;
-    if (result?.success) {
-      formElement?.reset();
-    }
-  }
+  import { submitContactForm } from '$lib/functions.remote';
 </script>
 
 <svelte:head>
@@ -24,51 +11,22 @@
   <p>Remote Function (Form) を使用したフォーム処理のデモです。</p>
   
   <div class="card">
-    <h2>📝 Form機能の特徴</h2>
+    <h2>📝 Remote Function (Form) の特徴</h2>
     <ul>
-      <li><strong>プログレッシブエンハンスメント</strong>: JavaScriptが無効でも動作</li>
-      <li><strong>自動CSRF保護</strong>: セキュリティが組み込み済み</li>
-      <li><strong>型安全性</strong>: FormDataの型チェック</li>
-      <li><strong>統一されたエラーハンドリング</strong>: 一貫した処理パターン</li>
+      <li><strong>型安全性</strong>: FormDataの引数と戻り値が完全に型チェックされる</li>
+      <li><strong>再利用性</strong>: フォーム処理ロジックをアプリケーション全体で共有可能</li>
+      <li><strong>分離された関心事</strong>: サーバーロジックとUIコードが明確に分離</li>
+      <li><strong>統一されたエラーハンドリング</strong>: カスタムエラークラスによる詳細なエラー処理</li>
+      <li><strong>開発体験の向上</strong>: 自動補完とIDEサポート</li>
     </ul>
   </div>
-  
-  <!-- 結果表示 -->
-  {#if submissionResult}
-    <div class="card">
-      {#if submissionResult.success}
-        <div class="success">
-          ✅ {submissionResult.message}
-          <br>
-          <small>送信日時: {new Date(submissionResult.submittedAt).toLocaleString('ja-JP')}</small>
-        </div>
-      {:else}
-        <div class="error">
-          ❌ {submissionResult.message}
-        </div>
-      {/if}
-    </div>
-  {/if}
   
   <!-- フォーム -->
   <div class="card">
     <h2>お問い合わせフォーム</h2>
     
-    <form 
-      bind:this={formElement}
-      use:enhance={({ formData, cancel }) => {
-        isSubmitting = true;
-        return async ({ result }) => {
-          if (result.type === 'success') {
-            handleResult(result.data);
-          } else if (result.type === 'failure') {
-            handleResult({ success: false, message: result.data?.message || 'エラーが発生しました' });
-          } else {
-            isSubmitting = false;
-          }
-        };
-      }}
-      method="POST"
+    <form
+      {...submitContactForm}
     >
       <div class="form-group">
         <label class="label" for="name">お名前 *</label>
@@ -108,17 +66,12 @@
       <button 
         class="button" 
         type="submit"
-        disabled={!!isSubmitting}
       >
-        {#if isSubmitting}
-          送信中...
-        {:else}
-          送信する
-        {/if}
+        送信する
       </button>
     </form>
     
-    {#if isSubmitting}
+    {#if submitContactForm.result?.success}
       <div style="margin-top: 1rem;">
         <div class="loading">お問い合わせを送信中...</div>
       </div>
@@ -133,16 +86,18 @@
       <div style="padding: 1rem; background: #f8f9fa; border-radius: 4px;">
         <h4>従来のform actions</h4>
         <ul style="font-size: 0.9rem;">
-          <li>ページ固有の実装</li>
+          <li>+page.server.tsに実装が必要</li>
           <li>型安全性が限定的</li>
-          <li>再利用性が低い</li>
+          <li>ページごとに実装が分散</li>
+          <li>エラーハンドリングが複雑</li>
         </ul>
       </div>
       <div style="padding: 1rem; background: #e8f5e8; border-radius: 4px;">
         <h4>Remote Function (Form)</h4>
         <ul style="font-size: 0.9rem;">
-          <li>アプリケーション全体で再利用可能</li>
+          <li>.remote.tsファイルで集中管理</li>
           <li>完全な型安全性</li>
+          <li>どこからでも呼び出し可能</li>
           <li>統一されたエラーハンドリング</li>
         </ul>
       </div>
@@ -155,10 +110,12 @@
       <li>型安全なFormData処理</li>
     </ul>
     
-    <h3>プログレッシブエンハンスメント</h3>
+    <h3>Remote Function の実装詳細</h3>
     <p>
-      このフォームは、JavaScriptが無効な環境でも通常のHTMLフォームとして動作します。
-      JavaScriptが有効な場合は、非同期送信とリアルタイムフィードバックが利用できます。
+      Remote Functionは、サーバーサイドの処理を型安全に実行できる機能です。
+      FormDataを受け取り、バリデーションとビジネスロジックを実行後、
+      型付けされた結果を返します。エラーハンドリングも組み込まれており、
+      ValidationErrorクラスを使用した詳細なエラーメッセージを提供できます。
     </p>
   </div>
   
