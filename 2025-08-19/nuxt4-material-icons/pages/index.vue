@@ -160,7 +160,7 @@ import helpIcon from '@material-design-icons/svg/filled/help.svg?component'
 
 // リアクティブデータ
 const selectedIcon = ref('')
-const dynamicIcon = ref(null)
+const dynamicIcon = shallowRef(null)
 const isFavorite = ref(false)
 const starHover = ref(false)
 
