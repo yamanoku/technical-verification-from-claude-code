@@ -1,0 +1,22 @@
+{
+  "name": "nuxt4-material-icons-verification",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "nuxt": "^4.0.3",
+    "@material-design-icons/svg": "^0.14.15"
+  },
+  "devDependencies": {
+    "@nuxtjs/tailwindcss": "^6.14.0"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  }
+}
