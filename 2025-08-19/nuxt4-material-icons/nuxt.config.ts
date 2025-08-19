@@ -14,7 +14,20 @@ export default defineNuxtConfig({
 
   vite: {
     plugins: [
-      svgLoader()
+      svgLoader({
+        svgoConfig: {
+          plugins: [
+            {
+              name: 'preset-default',
+              params: {
+                overrides: {
+                  removeViewBox: false,
+                },
+              },
+            },
+          ],
+        },
+      })
     ]
   },
 

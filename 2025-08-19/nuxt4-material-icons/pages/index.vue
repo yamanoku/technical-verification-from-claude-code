@@ -148,6 +148,16 @@ import favoriteIcon from '@material-design-icons/svg/filled/favorite.svg?compone
 import favoriteOutlineIcon from '@material-design-icons/svg/outlined/favorite_border.svg?component'
 import starIcon from '@material-design-icons/svg/filled/star.svg?component'
 
+// 動的インポート用のアイコンを事前にインポート
+import personIcon from '@material-design-icons/svg/filled/person.svg?component'
+import emailIcon from '@material-design-icons/svg/filled/email.svg?component'
+import phoneIcon from '@material-design-icons/svg/filled/phone.svg?component'
+import locationOnIcon from '@material-design-icons/svg/filled/location_on.svg?component'
+import calendarTodayIcon from '@material-design-icons/svg/filled/calendar_today.svg?component'
+import shoppingCartIcon from '@material-design-icons/svg/filled/shopping_cart.svg?component'
+import notificationsIcon from '@material-design-icons/svg/filled/notifications.svg?component'
+import helpIcon from '@material-design-icons/svg/filled/help.svg?component'
+
 // リアクティブデータ
 const selectedIcon = ref('')
 const dynamicIcon = ref(null)
@@ -166,7 +176,19 @@ const iconList = [
   'help'
 ]
 
-// 動的インポート関数
+// アイコンマップ（事前にインポートしたアイコンをマッピング）
+const iconMap = {
+  person: personIcon,
+  email: emailIcon,
+  phone: phoneIcon,
+  location_on: locationOnIcon,
+  calendar_today: calendarTodayIcon,
+  shopping_cart: shoppingCartIcon,
+  notifications: notificationsIcon,
+  help: helpIcon
+}
+
+// 動的インポート関数（実際は事前にインポートされたアイコンを選択）
 const loadDynamicIcon = async (iconName) => {
   if (!iconName) {
     dynamicIcon.value = null
@@ -174,8 +196,12 @@ const loadDynamicIcon = async (iconName) => {
   }
   
   try {
-    const module = await import(`@material-design-icons/svg/filled/${iconName}.svg?component`)
-    dynamicIcon.value = module.default
+    const icon = iconMap[iconName]
+    if (icon) {
+      dynamicIcon.value = icon
+    } else {
+      throw new Error(`Icon ${iconName} not found in icon map`)
+    }
   } catch (error) {
     console.error(`アイコン ${iconName} の読み込みに失敗しました:`, error)
     dynamicIcon.value = null
