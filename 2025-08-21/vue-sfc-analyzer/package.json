@@ -1,0 +1,26 @@
+{
+  "name": "vue-sfc-analyzer",
+  "version": "1.0.0",
+  "description": "Vue.js SFC解析ツール - TemplateやScript、StyleブロックをBaseline Widely Available評価",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@vue/compiler-sfc": "^3.5.18",
+    "compute-baseline": "^0.3.1",
+    "@mdn/browser-compat-data": "^6.1.4",
+    "web-features": "^2.44.0"
+  },
+  "keywords": [
+    "vue",
+    "sfc",
+    "baseline",
+    "compatibility",
+    "analyzer"
+  ],
+  "author": "Claude Code",
+  "license": "MIT"
+}
