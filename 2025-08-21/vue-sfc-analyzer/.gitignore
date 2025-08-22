@@ -1,0 +1,36 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+
+# ignore top-level vscode settings
+/.vscode/settings.json
+
+# do not commit .env files or any files that end with `.env`
+*.env
+
+# npm/yarn files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# build outputs
+build/
+coverage/
+.nyc_output/
+
+# temporary files
+tmp/
+temp/
+.cache/
+.parcel-cache/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+Thumbs.db
+.DS_Store
