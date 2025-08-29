@@ -36,11 +36,11 @@ jobs:
 
       - name: Run Claude Code
         id: claude
-        uses: anthropics/claude-code-action@0c127307fa529d701bc1f0f8f9c0bea881c49a9b # v1.0.2
+        uses: anthropics/claude-code-action@a6888c03f22170d00d2a92fa2317584ca7d5e108 # v1.0.2
         env:
           NODE_VERSION: "latest"
         with:
           anthropic_api_key: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           claude_args: |
-            --allowed-tools: ReadFile,WriteFile,SearchReplace,RunTerminalCmd,ListDir,GlobFileSearch,Grep
-            --disallowed-tools: WebSearch,DeleteFile
+            --allowedTools ReadFile,WriteFile,SearchReplace,RunTerminalCmd,ListDir,GlobFileSearch,Grep
+            --disallowedTools WebSearch,DeleteFile
