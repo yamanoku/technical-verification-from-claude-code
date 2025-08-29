@@ -10,4 +10,5 @@ ripple UIフレームワークの技術検証を実施します。
 - Svelte 5との技術比較
 
 ### 作業ディレクトリ
-- `ripple-investigation/` - rippleフレームワークの検証プロジェクト
+- `ripple-investigation/` - rippleフレームワークの技術調査
+- `ripple-demo-project/` - rippleフレームワーク実装デモプロジェクト

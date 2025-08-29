@@ -1,0 +1,18 @@
+{
+  "name": "ripple-demo-project",
+  "version": "1.0.0",
+  "description": "Ripple フレームワーク実装デモプロジェクト",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "@vitejs/plugin-legacy": "^5.0.0"
+  },
+  "dependencies": {
+    "ripple-js": "^0.1.0"
+  }
+}

@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+
+# ignore top-level vscode settings
+/.vscode/settings.json
+
+# do not commit .env files or any files that end with `.env`
+*.env
+
+# Ripple build artifacts
+*.ripple.js
+*.ripple.js.map
+.ripple/
