@@ -41,6 +41,3 @@ jobs:
           NODE_VERSION: "latest"
         with:
           anthropic_api_key: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          claude_args: |
-            --allowedTools: ReadFile,WriteFile,SearchReplace,RunTerminalCmd,ListDir,GlobFileSearch,Grep
-            --disallowedTools: WebSearch,DeleteFile
