@@ -8,11 +8,10 @@
     "build": "vite build",
     "preview": "vite preview"
   },
-  "devDependencies": {
-    "vite": "^5.0.0",
-    "@vitejs/plugin-legacy": "^5.0.0"
-  },
   "dependencies": {
-    "ripple-js": "^0.1.0"
+    "ripple": "^0.2.3"
+  },
+  "devDependencies": {
+    "vite": "7.1.3"
   }
 }
