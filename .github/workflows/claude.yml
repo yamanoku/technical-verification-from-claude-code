@@ -44,3 +44,4 @@ jobs:
           claude_args: |
             --allowedTools ReadFile,WriteFile,SearchReplace,RunTerminalCmd,ListDir,GlobFileSearch,Grep
             --disallowedTools WebSearch,DeleteFile
+            --model claude-opus-4-1-20250805
