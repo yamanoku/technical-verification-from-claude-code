@@ -38,15 +38,16 @@
 ### 3. ドキュメント化
 
 1. 調査した最新のベストプラクティスについてドキュメント化する
-2. `date +"%Y-%m-%d"` コマンドを実行し `{date}` 形式でルートディレクトリにプロジェクトを作成する。構成は以下を参考にする。
+2. `date +"%Y-%m-%d"` コマンドを実行し、取得した日付を使って `technical-verification-from-calude-code/YYYY/YYYY-MM-DD/project/` の形式でルートディレクトリにプロジェクトを作成してください。下記のディレクトリ構成例に従って、各検証は独立したディレクトリで管理します。
 
 ```
 technical-verification-from-calude-code/
-├── YYYY-MM-DD/          # 日付ごとの検証ディレクトリ
-│   ├── project/         # 検証対象のプロジェクト（ディレクトリ名は任意）
-│   │   .gitignore       # Git管理不要なファイル
-│   └── README.md        # 調査結果の報告ファイル
-└── CLAUDE.md           # このファイル
+├── YYYY/                   # 年区切りのディレクトリ
+│    └── YYYY-MM-DD/        # 日付ごとの検証ディレクトリ
+│       └── project/        # 検証対象のプロジェクト（ディレクトリ名は任意）
+│          .gitignore       # Git管理不要なファイル
+│          └── README.md    # 調査結果の報告ファイル
+└── CLAUDE.md               # このファイル
 ```
 
 ### .gitignore
